@@ -25,18 +25,19 @@ while true; do
                     
                     echo "Downloading train_labels.tar.gz from $TRAINLABEL..."
                     wget -nc -P $NEWDOWNLOADDIR $TRAINLABEL
+                    tar zxvf "train_labels.tar.gz" -C $NEWDOWNLOADDIR
+                    
                     echo "Downloading train_images.tar.gz from $TRAINIMG..."
                     wget -nc -P $NEWDOWNLOADDIR $TRAINIMG
+                    tar zxvf "train_images.tar.gz" -C $NEWDOWNLOADDIR
+                    
                     echo "Downloading validate_labels.tar.gz from $TESTLABEL..."
                     wget -nc -P $NEWDOWNLOADDIR $TESTLABEL
+                    tar zxvf "validate_labels_small.tar.gz" -C $NEWDOWNLOADDIR
+                    
                     echo "Downloading validate_images.tar.gz from $TESTIMG..."
                     wget -nc -P $NEWDOWNLOADDIR $TESTIMG
-                    
-                    # extract all
-                    for f in $NEWDOWNLOADDIR*.tar.gz
-                    do
-                    tar zxvf "$f" -C $NEWDOWNLOADDIR
-                    done
+                    tar zxvf "validate_images.tar.gz" -C $NEWDOWNLOADDIR
                     
                     exit
                     ;;
@@ -44,15 +45,19 @@ while true; do
                     # downloading data
                     echo "Downloading train_labels.tar.gz from $TRAINLABEL..."
                     wget -nc -P $DOWNLOADDIR $TRAINLABEL
+                    tar zxvf "train_labels.tar.gz" -C $DOWNLOADDIR
+                    
+                    echo "Downloading train_images.tar.gz from $TRAINIMG..."
                     wget -nc -P $DOWNLOADDIR $TRAINIMG
+                    tar zxvf "train_images.tar.gz" -C $DOWNLOADDIR
+                    
+                    echo "Downloading validate_labels.tar.gz from $TESTLABEL..."
                     wget -nc -P $DOWNLOADDIR $TESTLABEL
+                    tar zxvf "validate_labels_small.tar.gz" -C $DOWNLOADDIR
+                    
+                    echo "Downloading validate_images.tar.gz from $TESTIMG..."
                     wget -nc -P $DOWNLOADDIR $TESTIMG
-
-                    # extract all
-                    for f in $DOWNLOADDIR*.tar.gz
-                    do
-                    tar zxvf "$f" -C $DOWNLOADDIR
-                    done
+                    tar zxvf "validate_images.tar.gz" -C $DOWNLOADDIR
 
                     exit
                     ;;
