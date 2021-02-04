@@ -191,8 +191,8 @@ def build_tree(
     include_leaf_images=False,
     dataset=None,
     image_resize_factor=1,
-    include_fake_sublabels=False,
-    include_fake_labels=False,
+    include_fake_sublabels=True,
+    include_fake_labels=True,
     node_to_conf={},
 ):
     """
@@ -478,10 +478,10 @@ def generate_hierarchy_vis_from(
     vis_force_labels_left=(),
     vis_leaf_images=False,
     vis_image_resize_factor=1,
-    vis_fake_sublabels=False,
+    vis_fake_sublabels=True,
     vis_zoom=2,
     vis_curved=False,
-    vis_sublabels=False,
+    vis_sublabels=True,
     vis_height=750,
     vis_width=1000,
     vis_margin_top=20,
