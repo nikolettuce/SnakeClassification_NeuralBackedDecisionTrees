@@ -1,0 +1,5 @@
+{
+    "dataDir":"../teams/DSC180A_FA20_A00/a01group09",
+    "trainDir":"train_snakes_r1",
+    "valDir":"valid_snakes_r1"
+}

@@ -1,0 +1,10 @@
+{
+    "modelName": "densenet",
+    "inputSize": 224,
+    "batchSize": 16,
+    "featureExtract": "False",
+    "lr": 3e-4,
+    "nEpochs": 1,
+    "performancePath": "data/model_logs",
+    "model_state": "../teams/DSC180A_FA20_A00/a01group09"
+}
