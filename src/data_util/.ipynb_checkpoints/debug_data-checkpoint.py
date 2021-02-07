@@ -17,6 +17,12 @@ def create_validation_set(DATA_DIR, TRAIN_DIR, VALID_DIR, train):
     if not os.path.isdir(os.path.join(DATA_DIR, 'valid_snakes_r1')):
         os.mkdir(os.path.join(DATA_DIR, 'valid_snakes_r1'))
         
+    # check if dir already has validation data
+    if len(os.listdir(VALID_DIR)) > 0:
+        print("Already created validation set")
+        return
+        
+    print("Creating validation set at {}".format(VALID_DIR))
     for c in os.listdir(TRAIN_DIR): # get all class folder from train
         # build paths for sampling
         train_dir = os.path.join(TRAIN_DIR, c)
@@ -37,6 +43,8 @@ def create_validation_set(DATA_DIR, TRAIN_DIR, VALID_DIR, train):
         # move files
         for idx in valid_idx:
             os.rename(os.path.join(train_dir, data_list[idx]), os.path.join(valid_dir, data_list[idx]))
+    
+    print("Finished creating validation set")
             
 def delete_corrupted(DIR):
     '''
@@ -51,6 +59,7 @@ def delete_corrupted(DIR):
     params:
     DIR = directory to scan and delete files from
     '''
+    print("---> beginning corrupt file deletion....")
     # keep track of deleted files
     deleted_file_count = 0
     deleted_ipynb = 0
@@ -63,7 +72,6 @@ def delete_corrupted(DIR):
             fp = os.path.join(cur_dir, file)
             try:
                 if fp == fp.endswith('.ipynb_checkpoints'):
-                    print('TEST')
                     os.rmdir(fp)
                     
                     deleted_ipynb += 1

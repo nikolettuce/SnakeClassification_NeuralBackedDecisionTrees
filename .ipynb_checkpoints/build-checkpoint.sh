@@ -2,12 +2,10 @@
 
 # check if data is downloaded use wget
 # train data links
-TRAINLABEL="https://s3.eu-central-1.wasabisys.com/aicrowd-public-datasets/snakes-challenge/round-4/train_labels.tar.gz"
-TRAINIMG="https://s3.eu-central-1.wasabisys.com/aicrowd-public-datasets/snakes-challenge/round-4/train_images.tar.gz"
+TRAINIMG="https://s3.eu-central-1.amazonaws.com/aicrowd-static/datasets/snake-species-identification-challenge/train.tar.gz"
 
 # test data links
-TESTLABEL="https://s3.eu-central-1.wasabisys.com/aicrowd-public-datasets/snakes-challenge/round-4/validate_labels_small.tar.gz"
-TESTIMG="https://s3.eu-central-1.wasabisys.com/aicrowd-public-datasets/snakes-challenge/round-4/validate_images.tar.gz"
+TESTIMG="https://s3.eu-central-1.amazonaws.com/aicrowd-static/datasets/snake-species-identification-challenge/round1_test.tar.gz"
 
 # download directory
 DOWNLOADDIR=../teams/DSC180A_FA20_A00/a01capstonegroup06/
