@@ -8,7 +8,7 @@ TRAINIMG="https://s3.eu-central-1.amazonaws.com/aicrowd-static/datasets/snake-sp
 TESTIMG="https://s3.eu-central-1.amazonaws.com/aicrowd-static/datasets/snake-species-identification-challenge/round1_test.tar.gz"
 
 # download directory
-DOWNLOADDIR=../teams/DSC180A_FA20_A00/a01capstonegroup06/
+DOWNLOADDIR=../teams/DSC180B_WI21_A00/a01capstonegroup06/
 
 while true; do
     read -p "Do you wish to install this program (approximately 25 GB for downloading the data)?" yn
@@ -23,11 +23,11 @@ while true; do
                     
                     echo "Downloading train_images.tar.gz from $TRAINIMG..."
                     wget -nc -P $NEWDOWNLOADDIR $TRAINIMG
-                    tar zxvf "train_images.tar.gz" -C $NEWDOWNLOADDIR
+                    tar zxvf "${NEWDOWNLOADDIR}train.tar.gz" -C $NEWDOWNLOADDIR
                     
                     echo "Downloading validate_images.tar.gz from $TESTIMG..."
                     wget -nc -P $NEWDOWNLOADDIR $TESTIMG
-                    tar zxvf "validate_images.tar.gz" -C $NEWDOWNLOADDIR
+                    tar zxvf "${NEWDOWNLOADDIR}round1_test.tar.gz" -C $NEWDOWNLOADDIR
                     
                     exit
                     ;;
@@ -35,11 +35,11 @@ while true; do
                     # downloading data
                     echo "Downloading train_images.tar.gz from $TRAINIMG..."
                     wget -nc -P $DOWNLOADDIR $TRAINIMG
-                    tar zxvf "train_images.tar.gz" -C $DOWNLOADDIR
+                    tar zxvf "${DOWNLOADDIR}train.tar.gz" -C $DOWNLOADDIR
                     
                     echo "Downloading validate_images.tar.gz from $TESTIMG..."
                     wget -nc -P $DOWNLOADDIR $TESTIMG
-                    tar zxvf "validate_images.tar.gz" -C $DOWNLOADDIR
+                    tar zxvf "${DOWNLOADDIR}round1_test.tar.gz" -C $DOWNLOADDIR
 
                     exit
                     ;;
