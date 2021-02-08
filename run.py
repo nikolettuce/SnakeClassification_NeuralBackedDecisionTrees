@@ -4,9 +4,6 @@ sys.path.insert(0, "src/util")
 sys.path.insert(0, "src/model")
 sys.path.insert(0, "src/data_util")
 
-#import for build.sh
-import subprocess
-
 # imports for model
 import torch
 import torchvision
@@ -29,6 +26,7 @@ from graph import *
 from dir_grab import *
 from hierarchy import *
 from debug_data import *
+from write_to_json import *
 
 from datetime import datetime
 
@@ -40,8 +38,8 @@ def main(targets):
     
     targets:
     data - builds data from build.sh, will run if no model folder is found.
-    train - checks if data target has been run, runs model to train
-    test - checks if data/train have been run, then creates induced hierarchy
+    test - checks if data target has been run, runs model to train
+    hierarchy - creates induced hierarchy and visualizes it
     '''
     
     if 'data' in targets:
@@ -73,9 +71,8 @@ def main(targets):
         
         print("---> Finished running data target.")
         
-    if 'train' in targets:
-        print('---> Running train target...')
-        
+    if 'test' in targets:
+        print('---> Running test target...')
         with open('config/data-params.json') as fh:
             data_cfg = json.load(fh)
             print('---> loaded data config')
@@ -84,6 +81,11 @@ def main(targets):
             model_cfg = json.load(fh)
             print('---> loaded model config')
         
+        # check that data target has been ran
+        VALID_DIR = os.path.join(data_cfg['dataDir'], 'valid_snakes_r1')
+        if not os.path.isdir(VALID_DIR):
+            raise Exception('Please run data target before running test')
+            
         # create dataloaders
         dataloaders_dict, num_classes = create_dataloaders(
             data_cfg['dataDir'],
@@ -92,7 +94,7 @@ def main(targets):
         )
         
         # Detect if we have a GPU available
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
         # Initialize the model for this run
         model_ft, input_size = initialize_model(
@@ -121,7 +123,7 @@ def main(targets):
             num_epochs = model_cfg['nEpochs'])
         
         # save model to model states in params
-        now = datetime.now().strftime("%d/%m/%Y_%H:%M")
+        now = datetime.now().strftime("%d%m%Y_%H:%M")
         model_path = os.path.join(data_cfg['dataDir'], "model_states")
         model_name = os.path.join(
             model_path, 
@@ -149,6 +151,52 @@ def main(targets):
         )
         
         print("---> Finished running train target.")
+        
+    if "hierarchy" in targets:
+        print('---> Runnning hierarchy target')
+        
+        with open('config/data-params.json') as fh:
+            data_cfg = json.load(fh)
+            print('---> loaded data config')
+            
+        with open('config/model-params.json') as fh:
+            model_cfg = json.load(fh)
+            print('---> loaded model config')
+            
+        # use pretrained densenet
+        model = models.densenet121(pretrained=True)
+        # set features from classes, in this case 45, input_size always 224
+        model.classifier = nn.Linear(model.classifier.in_features, model_cfg['nClasses'])
+        input_size = model_cfg['inputSize']
+        
+        # load state dict from previous
+        if not os.path.exists(data_cfg['hierarchyModelPath']):
+            raise Exception('Please run train target before hierarchy target, or change hierarchyModelPath in data-params if model has been trained.')
+        model_weights = torch.load(data_cfg['hierarchyModelPath'])
+        model.load_state_dict(model_weights)
+        
+        # generate hierarchy
+        print("---> Generating hierarchy...")
+        generate_hierarchy(
+            dataset='snakes',
+            arch= data_cfg['hierarchyModel'],
+            model=model,
+            method='induced'
+        )
+        print("---> Finished generating hierarchy.")
+        
+        # test hierarchy
+        print("---> Testing hierarchy...")
+        test_hierarchy(
+            'snakes',
+            os.path.join(data_cfg['hierarchyPath'], data_cfg['hierarchyJSON'])
+        )
+        
+        generate_hierarchy_vis(
+            os.path.join(data_cfg['hierarchyPath'], data_cfg['hierarchyJSON']),
+            'snakes'
+        )
+        
         
         
 if __name__ == '__main__':

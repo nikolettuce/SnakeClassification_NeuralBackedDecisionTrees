@@ -21,7 +21,7 @@ def write_model_to_json(loss_train, acc_train, fs_train, loss_val, acc_val, fs_v
     
     # date
     now = datetime.now()
-    now_formatted = now.strftime("%d/%m/%Y_%H:%M")
+    now_formatted = now.strftime("%d%m%Y_%H:%M")
     
     # format filename
     file_name = "{}_{}_{}_performance.json".format(now_formatted, n_epochs, model_name)
