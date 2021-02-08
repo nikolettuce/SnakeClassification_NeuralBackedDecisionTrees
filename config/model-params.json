@@ -4,8 +4,8 @@
     "batchSize": 16,
     "featureExtract": "False",
     "lr": 3e-4,
-    "nEpochs": 1,
+    "nEpochs": 5,
     "performancePath": "data/model_logs",
-    "model_state": "../teams/DSC180A_FA20_A00/a01group09",
+    "model_state": "../teams/DSC180B_WI21_A00/a01capstonegroup06",
     "nClasses": 45
 }
