@@ -43,10 +43,18 @@ Last, but not least, we are currently working on transforming the CNN models to 
 When creating the hierarchy tree, one thing to note is that "[it] requires pre-trained model weights". We took row vectors wk : k ∈ [1, K], each representing a class, from the fully- connected layer weights W; then, we ran hierarchical agglomerative clustering on the normalized class representatives wk/kwkk2. Last but not least, we built the leaf nodes based on the weights. [4]
 ### Results
 
+#### Heatmaps
+
 <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/0a00cdd2b8.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam%201.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam_gb%201.jpg" width="200"> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/gb%201.jpg" width="200"> 
 
 
 <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/0a7eded849.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam%204.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam_gb%204.jpg" width="200"> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/gb%204.jpg" width="200"> 
+
+<img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/0a54501d6d.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam%207.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam_gb%207.jpg" width="200"> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/gb%207.jpg" width="200"> 
+
+#### Hierarchy Trees
+
+<img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/Screen%20Shot%202021-02-07%20at%205.32.34%20PM.png">
 
 ### Conclusions
 
