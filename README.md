@@ -43,9 +43,9 @@ Last, but not least, we are currently working on transforming the CNN models to 
 When creating the hierarchy tree, one thing to note is that "[it] requires pre-trained model weights". We took row vectors wk : k ∈ [1, K], each representing a class, from the fully- connected layer weights W; then, we ran hierarchical agglomerative clustering on the normalized class representatives wk/kwkk2. Last but not least, we built the leaf nodes based on the weights. [4]
 ### Results
 
-![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/0a00cdd2b8.jpg)![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam%201.jpg)
+![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/0a00cdd2b8.jpg)![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam%201.jpg)![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam_gb%201.jpg)
 
-![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam_gb%201.jpg)
+
 
 ### Conclusions
 
