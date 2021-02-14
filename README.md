@@ -45,7 +45,7 @@ When creating the hierarchy tree, one thing to note is that "[it] requires pre-t
 
 ![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/0a00cdd2b8.jpg)![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam%201.jpg)![alt text](https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam_gb%201.jpg)
 
-<img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/0a00cdd2b8.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam%201.jpg" width="200"/>
+<img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/0a00cdd2b8.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam%201.jpg" width="200"/> <img src="https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees/blob/reputation/cam_gb%201.jpg" width="200">
 
 
 ### Conclusions
