@@ -197,6 +197,32 @@ def main(targets):
             'snakes'
         )
         
+    if "nbdt_loss" in targets:
+        print('---> Runnning nbdt_loss target')
+        
+        with open('config/data-params.json') as fh:
+            data_cfg = json.load(fh)
+            print('---> loaded data config')
+            
+        with open('config/model-params.json') as fh:
+            model_cfg = json.load(fh)
+            print('---> loaded model config')
+        
+        # use pretrained densenet
+        model = models.densenet121(pretrained=True)
+        
+        # set features from classes, in this case 45, input_size always 224
+        model.classifier = nn.Linear(model.classifier.in_features, model_cfg['nClasses'])
+        input_size = model_cfg['inputSize']
+        model_weights = torch.load(data_cfg['hierarchyModelPath'])
+        
+        criterion = nn.CrossEntropyLoss()
+        criterion = SoftTreeSupLoss(
+            dataset='snakes',
+            hierarchy='graph-induced-densenet121',
+            criterion=criterion
+        )
+        
         
         
 if __name__ == '__main__':
