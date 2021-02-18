@@ -9,15 +9,15 @@ def write_model_to_json(loss_train, acc_train, fs_train, loss_val, acc_val, fs_v
     '''
     data = {}
     
-    # train performance
-    data['loss_train'] = loss_train
-    data['acc_train'] = acc_train
-    data['fs_train'] = fs_train
+    # train performance, take last entry as final epoch.
+    data['loss_train'] = loss_train[-1]
+    data['acc_train'] = acc_train[-1]
+    data['fs_train'] = fs_train[-1]
     
     # validation performance
-    data['loss_val'] = loss_val
-    data['acc_val'] = acc_val
-    data['fs_val'] = fs_val
+    data['loss_val'] = loss_val[-1]
+    data['acc_val'] = acc_val[-1]
+    data['fs_val'] = fs_val[-1]
     
     # date
     now = datetime.now()

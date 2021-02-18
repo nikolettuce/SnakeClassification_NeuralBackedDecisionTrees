@@ -29,7 +29,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
     fs_val_evo=[] 
     
     # Detect if we have a GPU available
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     print('---> Begin model training...')
     for epoch in range(num_epochs):
