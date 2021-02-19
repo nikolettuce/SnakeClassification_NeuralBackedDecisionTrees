@@ -219,10 +219,20 @@ def main(targets):
         criterion = nn.CrossEntropyLoss()
         criterion = SoftTreeSupLoss(
             dataset='snakes',
-            hierarchy='graph-induced-densenet121',
+            hierarchy='induced-densenet121',
+            path_graph = "./data/hierarchies/snakes/graph-induced-densenet121.json",
+            path_wnids = "./data/wnids/snakes.txt",
             criterion=criterion
         )
         
+        # using induced hierarchy, create model 
+        model = SoftNBDT(
+            model = model,
+            dataset = 'snakes', 
+            hierarchy='induced-densenet121',
+            path_graph = "./data/hierarchies/snakes/graph-induced-densenet121.json",
+            path_wnids = "./data/wnids/snakes.txt"
+        )
         
         
 if __name__ == '__main__':
