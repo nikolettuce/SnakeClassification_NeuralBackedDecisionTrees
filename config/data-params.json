@@ -5,5 +5,7 @@
     "hierarchyModelPath": "../teams/DSC180B_WI21_A00/a01capstonegroup06/model_states/07022021_17:18_5_densenet.pth",
     "hierarchyPath": "./data/hierarchies/snakes/",
     "hierarchyJSON": "graph-induced-densenet121.json",
-    "hierarchyModel":"densenet121"
+    "hierarchyModel":"densenet121",
+    "wnidPath": "./data/wnids/snakes.txt",
+    "dataset":"snakes"
 }

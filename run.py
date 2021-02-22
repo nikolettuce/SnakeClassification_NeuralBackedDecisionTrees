@@ -27,6 +27,7 @@ from dir_grab import *
 from hierarchy import *
 from debug_data import *
 from write_to_json import *
+from loss import *
 
 from datetime import datetime
 
@@ -85,65 +86,14 @@ def main(targets):
         VALID_DIR = os.path.join(data_cfg['dataDir'], 'valid_snakes_r1')
         if not os.path.isdir(VALID_DIR):
             raise Exception('Please run data target before running test')
-            
-        # create dataloaders
-        dataloaders_dict, num_classes = create_dataloaders(
-            data_cfg['dataDir'],
-            model_cfg['batchSize'],
-            model_cfg['inputSize']
-        )
         
-        # Detect if we have a GPU available
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
-        # Initialize the model for this run
-        model_ft, input_size = initialize_model(
-            model_cfg['modelName'],
-            num_classes,
-            feature_extract = model_cfg['featureExtract'],
-            use_pretrained=True
-        )
-        
-        model_ft = model_ft.to(device) # make model use GPU
-        
-        params_update = params_to_update(model_ft, model_cfg['featureExtract'])
-        
-        # Optimizer
-        optimizer_ft = optim.Adam(params_update, lr=model_cfg['lr'])
         
         # Loss function
-        criterion = nn.CrossEntropyLoss()
-        criterion = SoftTreeSupLoss(
-            dataset='snakes',
-            hierarchy='induced-densenet121',
-            path_graph = "./data/hierarchies/snakes/graph-induced-densenet121.json", #TODO
-            path_wnids = "./data/wnids/snakes.txt", #TODO
-            criterion = criterion
-        )
+        criterion = SoftTreeLoss_wrapper(data_cfg)
         
-        # train model
-        model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = train_model(
-            model_ft,
-            dataloaders_dict,
-            criterion,
-            optimizer = optimizer_ft,
-            num_epochs = model_cfg['nEpochs'])
+        # create and train model
+        model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = run_model(data_cfg, model_cfg, criterion)
         
-        # save model to model states in params
-        now = datetime.now().strftime("%d%m%Y_%H:%M")
-        model_path = os.path.join(data_cfg['dataDir'], "model_states")
-        model_name = os.path.join(
-            model_path, 
-            "{}_{}_{}.pth".format(
-                now,
-                model_cfg['nEpochs'],
-                model_cfg['modelName']
-            )
-        )
-        if not os.path.isdir(model_path): # make sure model path is made
-            os.mkdir(model_path)
-            
-        torch.save(model_ft.state_dict(), model_name)
         # write performance to data/model_logs
         write_model_to_json(
             loss_train,
@@ -240,14 +190,7 @@ def main(targets):
         model_weights = torch.load(data_cfg['hierarchyModelPath'])
         
         print('---> NBDT transition beginning...')
-        criterion = nn.CrossEntropyLoss()
-        criterion = SoftTreeSupLoss(
-            dataset='snakes',
-            hierarchy='induced-densenet121',
-            path_graph = "./data/hierarchies/snakes/graph-induced-densenet121.json", #TODO
-            path_wnids = "./data/wnids/snakes.txt", #TODO
-            criterion = criterion
-        )
+        criterion = SoftTreeLoss_wrapper(data_cfg)
         
         # using induced hierarchy, create model 
         nbdt_model = SoftNBDT(
