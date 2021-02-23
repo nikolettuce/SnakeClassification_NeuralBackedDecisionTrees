@@ -1,7 +1,12 @@
+# import custom modules
+import sys
+sys.path.insert(0, "src/util")
+sys.path.insert(0, "src/data_util")
+
 # imports
 import torch
 import torchvision
-import random
+
 import copy
 import torch.optim as optim
 import numpy as np
@@ -11,6 +16,8 @@ import torch.utils.checkpoint as cp
 from torchvision import datasets, models, transforms
 from sklearn.metrics import f1_score
 import os
+
+from write_to_json import *
 
 def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
     '''
@@ -161,8 +168,7 @@ def create_dataloaders(DATA_DIR, batch_size, input_size):
     image_datasets = {
         x: datasets.ImageFolder(os.path.join(DATA_DIR, x), data_transforms[x]) for x in [
             'train_snakes_r1',
-            'valid_snakes_r1']
-        
+            'valid_snakes_r1']   
     }
     
     # Create training and validation dataloaders
@@ -202,4 +208,65 @@ def params_to_update(model_ft, feature_extract):
                 a=1 # print("\t",name)
                 
     return params_to_update
+
+def run_model(data_cfg, model_cfg, criterion):
+    '''
+    Runs model based on parameters from data_cfg and model_cfg. Additionally, writes best model's weights to a path in config
+    '''
     
+    # create dataloaders
+    dataloaders_dict, num_classes = create_dataloaders(
+        data_cfg['dataDir'],
+        model_cfg['batchSize'],
+        model_cfg['inputSize']
+    )
+    
+    # Detect if we have a GPU available
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # Initialize the model for this run
+    model_ft, input_size = initialize_model(
+        model_cfg['modelName'],
+        num_classes,
+        feature_extract = model_cfg['featureExtract'],
+        use_pretrained=True
+    )
+
+    model_ft = model_ft.to(device) # make model use GPU
+
+    params_update = params_to_update(model_ft, model_cfg['featureExtract'])
+
+    # Optimizer
+    optimizer_ft = optim.Adam(params_update, lr=model_cfg['lr'])
+    
+    # train model
+    model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = train_model(
+        model_ft,
+        dataloaders_dict,
+        criterion,
+        optimizer = optimizer_ft,
+        num_epochs = model_cfg['nEpochs'])
+    
+    return model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val 
+    
+def save_model(model_ft, data_cfg, model_cfg):
+    '''
+    saves weights of a passed model
+    '''
+    # save model to model states in params
+    now = datetime.now().strftime("%d%m%Y_%H:%M")
+    model_path = os.path.join(data_cfg['dataDir'], "model_states")
+    model_name = os.path.join(
+        model_path, 
+        "{}_{}_{}.pth".format(
+            now,
+            model_cfg['nEpochs'],
+            model_cfg['modelName']
+        )
+    )
+    if not os.path.isdir(model_path): # make sure model path is made
+        print("---> Creating {}".format(model_path))
+        os.mkdir(model_path)
+        
+    # saves model
+    torch.save(model_ft.state_dict(), model_name)
