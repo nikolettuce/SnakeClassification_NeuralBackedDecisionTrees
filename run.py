@@ -72,8 +72,8 @@ def main(targets):
         
         print("---> Finished running data target.")
         
-    if 'test' in targets:
-        print('---> Running test target...')
+    if 'train' in targets:
+        print('---> Running train target...')
         with open('config/data-params.json') as fh:
             data_cfg = json.load(fh)
             print('---> loaded data config')
@@ -81,14 +81,22 @@ def main(targets):
         with open('config/model-params.json') as fh:
             model_cfg = json.load(fh)
             print('---> loaded model config')
-        
+            
         # check that data target has been ran
         VALID_DIR = os.path.join(data_cfg['dataDir'], 'valid_snakes_r1')
         if not os.path.isdir(VALID_DIR):
             raise Exception('Please run data target before running test')
         
-        # Loss function
-        criterion = SoftTreeLoss_wrapper(data_cfg)
+        if 'SoftTreeSupLoss' in targets:
+            criterion = SoftTreeLoss_wrapper(data_cfg)
+        elif 'HardTreeSupLoss' in targets:
+            criterion = HardTreeLoss_wrapper(data_cfg)
+        else:
+            criterion = nn.CrossEntropyLoss()
+        
+        
+        #TESTING
+        torch.autograd.set_detect_anomaly(True)
         
         # create and train model
         model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = run_model(data_cfg, model_cfg, criterion)
@@ -107,6 +115,45 @@ def main(targets):
         )
         
         print("---> Finished running test target.")
+        
+    if 'test' in targets:
+        print('---> Running test target...')
+        with open('config/data-params.json') as fh:
+            data_cfg = json.load(fh)
+            print('---> loaded data config')
+            
+        with open('config/model-params.json') as fh:
+            model_cfg = json.load(fh)
+            print('---> loaded model config')
+        
+        # check that data target has been ran
+        VALID_DIR = os.path.join(data_cfg['dataDir'], 'valid_snakes_r1')
+        if not os.path.isdir(VALID_DIR):
+            raise Exception('Please run data target before running test')
+        
+        # Loss function
+        criterion = SoftTreeLoss_wrapper(data_cfg)
+        
+        #TESTING
+        torch.autograd.set_detect_anomaly(True)
+        
+        # create and train model
+        model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = run_model(data_cfg, model_cfg, criterion)
+        
+        # write performance to data/model_logs
+        write_model_to_json(
+            loss_train,
+            acc_train,
+            fs_train,
+            loss_val,
+            acc_val,
+            fs_val,
+            n_epochs = model_cfg['nEpochs'],
+            model_name = model_cfg['modelName'],
+            fp = model_cfg['performancePath']
+        )
+        
+        print("---> Finished running train target.")
         
     if "hierarchy" in targets:
         print('---> Runnning hierarchy target')
