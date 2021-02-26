@@ -125,19 +125,19 @@ def main(targets):
         model.classifier = nn.Linear(model.classifier.in_features, model_cfg['nClasses'])
         input_size = model_cfg['inputSize']
         
-        # load state dict from previous
-        if not os.path.exists(data_cfg['hierarchyModelPath']):
-            raise Exception('Please run train target before hierarchy target, or change hierarchyModelPath in data-params if model has been trained.')
-        model_weights = torch.load(data_cfg['hierarchyModelPath'])
-        model.load_state_dict(model_weights)
+        ## load state dict from previous
+        #if not os.path.exists(data_cfg['hierarchyModelPath']):
+        #    raise Exception('Please run train target before hierarchy target, or change hierarchyModelPath in data-params if model has been trained.')
+        #model_weights = torch.load(data_cfg['hierarchyModelPath'])
+        #model.load_state_dict(model_weights)
         
         # generate hierarchy
         print("---> Generating hierarchy...")
         generate_hierarchy(
             dataset='snakes',
-            arch= data_cfg['hierarchyModel'],
-            model=model,
-            method='induced'
+            arch = data_cfg['hierarchyModel'],
+            model = model,
+            method = 'induced'
         )
         print("---> Finished generating hierarchy.")
         
@@ -230,6 +230,43 @@ def main(targets):
         epoch_fscore = np.average(np.array(fscore))
 
         print('{} Loss: {:.4f} Acc: {:.4f} F: {:.3f}'.format(phase, epoch_loss, epoch_acc, epoch_fscore))
+        
+    if "baseline_cnn" in targets:
+        print('---> Runnning baseline_cnn target')
+        
+        with open('config/data-params.json') as fh:
+            data_cfg = json.load(fh)
+            print('---> loaded data config')
+            
+        with open('config/model-params.json') as fh:
+            model_cfg = json.load(fh)
+            print('---> loaded model config')
+        
+        # check that data target has been ran
+        VALID_DIR = os.path.join(data_cfg['dataDir'], 'valid_snakes_r1')
+        if not os.path.isdir(VALID_DIR):
+            raise Exception('Please run data target before running test')
+        
+        # Loss function
+        criterion = nn.CrossEntropyLoss()
+        
+        # create and train model
+        model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = run_model(data_cfg, model_cfg, criterion)
+        
+        # write performance to data/model_logs
+        write_model_to_json(
+            loss_train,
+            acc_train,
+            fs_train,
+            loss_val,
+            acc_val,
+            fs_val,
+            n_epochs = model_cfg['nEpochs'],
+            model_name = model_cfg['modelName'],
+            fp = model_cfg['performancePath']
+        )
+        
+        print("---> Finished running baseline_cnn target.")
         
         
 if __name__ == '__main__':

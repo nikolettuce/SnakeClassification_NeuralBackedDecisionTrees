@@ -65,14 +65,14 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
                 # forward
                 # track history if only in train
 
-                with torch.set_grad_enabled(phase == 'train'):
+                with torch.set_grad_enabled(phase == 'train_snakes_r1'):
                     # calculate loss from model outputs
                     outputs = model(inputs)
                     loss = criterion(outputs, labels)
                     _, preds = torch.max(outputs, 1)
 
                     # backward + optimize only if in training phase
-                    if phase == 'train':
+                    if phase == 'train_snakes_r1':
                         loss.backward()
                         optimizer.step()
 
@@ -90,7 +90,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
             
             print('{} Loss: {:.4f} Acc: {:.4f} F: {:.3f}'.format(phase, epoch_loss, epoch_acc, epoch_fscore))
             
-            if phase == 'train':
+            if phase == 'train_snakes_r1':
                 loss_train_evo.append(epoch_loss)
                 epoch_acc = epoch_acc.cpu().numpy()
                 acc_train_evo.append(epoch_acc)
@@ -102,7 +102,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
                 fs_val_evo.append(epoch_fscore) 
                 
             # deep copy the model
-            if phase == 'val' and epoch_fscore > best_fscore:
+            if phase == 'valid_snakes_r1' and epoch_fscore > best_fscore:
                 best_acc = epoch_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
 
@@ -129,9 +129,6 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
     ft_extract = False
     if feature_extract == "True":
         ft_extract=True
-    
-    model_ft = None
-    input_size = 0
 
     model_ft = models.densenet121(pretrained=use_pretrained)
     set_parameter_requires_grad(model_ft, ft_extract)
