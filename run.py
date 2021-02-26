@@ -19,7 +19,9 @@ from sklearn.metrics import f1_score
 from baseline import *
 
 from nbdt.model import SoftNBDT
+from nbdt.model import HardNBDT
 from nbdt.loss import SoftTreeSupLoss
+from nbdt.loss import HardTreeSupLoss
 
 from wn_utils import *
 from graph import *
@@ -94,49 +96,6 @@ def main(targets):
         else:
             criterion = nn.CrossEntropyLoss()
         
-        
-        #TESTING
-        torch.autograd.set_detect_anomaly(True)
-        
-        # create and train model
-        model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = run_model(data_cfg, model_cfg, criterion)
-        
-        # write performance to data/model_logs
-        write_model_to_json(
-            loss_train,
-            acc_train,
-            fs_train,
-            loss_val,
-            acc_val,
-            fs_val,
-            n_epochs = model_cfg['nEpochs'],
-            model_name = model_cfg['modelName'],
-            fp = model_cfg['performancePath']
-        )
-        
-        print("---> Finished running test target.")
-        
-    if 'test' in targets:
-        print('---> Running test target...')
-        with open('config/data-params.json') as fh:
-            data_cfg = json.load(fh)
-            print('---> loaded data config')
-            
-        with open('config/model-params.json') as fh:
-            model_cfg = json.load(fh)
-            print('---> loaded model config')
-        
-        # check that data target has been ran
-        VALID_DIR = os.path.join(data_cfg['dataDir'], 'valid_snakes_r1')
-        if not os.path.isdir(VALID_DIR):
-            raise Exception('Please run data target before running test')
-        
-        # Loss function
-        criterion = SoftTreeLoss_wrapper(data_cfg)
-        
-        #TESTING
-        torch.autograd.set_detect_anomaly(True)
-        
         # create and train model
         model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = run_model(data_cfg, model_cfg, criterion)
         
@@ -154,6 +113,38 @@ def main(targets):
         )
         
         print("---> Finished running train target.")
+        
+    if 'test' in targets:
+        print('---> Running test target...')
+        with open('config/data-params.json') as fh:
+            data_cfg = json.load(fh)
+            print('---> loaded data config')
+            
+        with open('config/model-params.json') as fh:
+            model_cfg = json.load(fh)
+            print('---> loaded model config')
+        
+        # check that data target has been ran
+        VALID_DIR = os.path.join(data_cfg['dataDir'], 'valid_snakes_r1')
+        if not os.path.isdir(VALID_DIR):
+            raise Exception('Please run data target before running test')
+        
+        # create and train model
+        print("!!! Please enter either 1 for (SoftTreeSupLoss, SoftNBDT) or 2 for (HardTreeSupLoss, HardNBDT) !!!")
+        loss_type = input()
+        
+        assert (
+            loss_type in ['1','2']
+        ), "Please input either 1 or 2."
+        
+        if loss_type == '1':
+            loss_type = 'SoftTreeSupLoss'
+        elif loss_type == '2':
+            loss_type = 'HardTreeSupLoss'
+        
+        run_nbdt(data_cfg, model_cfg, loss_type)
+        
+        print("---> Finished running test target.")
         
     if "hierarchy" in targets:
         print('---> Runnning hierarchy target')
@@ -173,10 +164,10 @@ def main(targets):
         input_size = model_cfg['inputSize']
         
         ## load state dict from previous
-        #if not os.path.exists(data_cfg['hierarchyModelPath']):
-        #    raise Exception('Please run train target before hierarchy target, or change hierarchyModelPath in data-params if model has been trained.')
-        #model_weights = torch.load(data_cfg['hierarchyModelPath'])
-        #model.load_state_dict(model_weights)
+        if not os.path.exists(data_cfg['hierarchyModelPath']):
+            raise Exception('Please run train target before hierarchy target, or change hierarchyModelPath in data-params if model has been trained.')
+        model_weights = torch.load(data_cfg['hierarchyModelPath'])
+        model.load_state_dict(model_weights)
         
         # generate hierarchy
         print("---> Generating hierarchy...")
@@ -208,77 +199,10 @@ def main(targets):
             print('---> loaded data config')
             
         with open('config/model-params.json') as fh:
-            model_cfg = json.load(fh)
-            print('---> loaded model config')
+            model_cfg = json.load(fh)        
         
-        # create dataloaders
-        dataloaders_dict, num_classes = create_dataloaders(
-            data_cfg['dataDir'],
-            model_cfg['batchSize'],
-            model_cfg['inputSize']
-        )
         
-        # Detect if we have a GPU available
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
-        # Initialize the model for this run
-        model, input_size = initialize_model(
-            model_cfg['modelName'],
-            num_classes,
-            feature_extract = model_cfg['featureExtract'],
-            use_pretrained = True
-        )
-        
-        #model = model.to(device) # make model use GPU
-        
-        # set features from classes, in this case 45, input_size always 224
-        model.classifier = nn.Linear(model.classifier.in_features, model_cfg['nClasses'])
-        model_weights = torch.load(data_cfg['hierarchyModelPath'])
-        
-        print('---> NBDT transition beginning...')
-        if 'softloss' in targets:
-            criterion = SoftTreeLoss_wrapper(data_cfg)
-        elif 'hardloss' in targets:
-            criterion = HardTreeLoss_wrapper(data_cfg)
-        
-        # using induced hierarchy, create model 
-        nbdt_model = SoftNBDT(
-            model = model,
-            dataset = 'snakes', 
-            hierarchy='induced-densenet121',
-            path_graph = "./data/hierarchies/snakes/graph-induced-densenet121.json",
-            path_wnids = "./data/wnids/snakes.txt"
-        )
-        print('---> NBDT transition finished.')
-        
-        print('---> Begin inference testing...')
-        # iterate over data
-        for inputs, labels in dataloaders_dict['valid_snakes_r1']:
-            #inputs = inputs.to(device)
-            # labels = labels.to(device)
-
-            # calculate loss from model outputs
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
-            _, preds = torch.max(outputs, 1)
-
-            # statistics
-            labels_cpu = labels.cpu().numpy()
-            predictions_cpu = preds.cpu().numpy()
-            Fscore = f1_score(labels_cpu, predictions_cpu, average='macro')
-            fscore.append(Fscore)
-            running_loss += loss.item() * inputs.size(0)
-            running_corrects += torch.sum(preds == labels.data)
-        print('---> Finished inference testing.')
-        
-        # calculate final stats
-        epoch_loss = running_loss / len(dataloaders[phase].dataset)
-        epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
-        epoch_fscore = np.average(np.array(fscore))
-
-        print('{} Loss: {:.4f} Acc: {:.4f} F: {:.3f}'.format(phase, epoch_loss, epoch_acc, epoch_fscore))
-        
-    if "baseline_cnn" in targets:
+    if "inference" in targets:
         print('---> Runnning baseline_cnn target')
         
         with open('config/data-params.json') as fh:
@@ -288,30 +212,6 @@ def main(targets):
         with open('config/model-params.json') as fh:
             model_cfg = json.load(fh)
             print('---> loaded model config')
-        
-        # check that data target has been ran
-        VALID_DIR = os.path.join(data_cfg['dataDir'], 'valid_snakes_r1')
-        if not os.path.isdir(VALID_DIR):
-            raise Exception('Please run data target before running test')
-        
-        # Loss function
-        criterion = nn.CrossEntropyLoss()
-        
-        # create and train model
-        model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val = run_model(data_cfg, model_cfg, criterion)
-        
-        # write performance to data/model_logs
-        write_model_to_json(
-            loss_train,
-            acc_train,
-            fs_train,
-            loss_val,
-            acc_val,
-            fs_val,
-            n_epochs = model_cfg['nEpochs'],
-            model_name = model_cfg['modelName'],
-            fp = model_cfg['performancePath']
-        )
         
         print("---> Finished running baseline_cnn target.")
         
