@@ -1,6 +1,7 @@
 import torch.nn as nn
 from nbdt.loss import SoftTreeSupLoss
 from nbdt.loss import HardTreeSupLoss
+import os
 
 def SoftTreeLoss_wrapper(data_cfg):
     '''
@@ -14,7 +15,7 @@ def SoftTreeLoss_wrapper(data_cfg):
         dataset = data_cfg['dataset'],
         hierarchy='induced-densenet121',
         path_graph = os.path.join(data_cfg['hierarchyPath'], data_cfg['hierarchyJSON']),
-        path_wnids = data_cfg[wnidPath],
+        path_wnids = data_cfg['wnidPath'],
         criterion = criterion
     )
     
@@ -32,7 +33,7 @@ def HardTreeLoss_wrapper(data_cfg):
         dataset = data_cfg['dataset'],
         hierarchy='induced-densenet121',
         path_graph = os.path.join(data_cfg['hierarchyPath'], data_cfg['hierarchyJSON']),
-        path_wnids = data_cfg[wnidPath],
+        path_wnids = data_cfg['wnidPath'],
         criterion = criterion
     )
     

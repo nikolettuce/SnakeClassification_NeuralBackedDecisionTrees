@@ -247,6 +247,9 @@ def run_model(data_cfg, model_cfg, criterion):
         optimizer = optimizer_ft,
         num_epochs = model_cfg['nEpochs'])
     
+    # save model
+    save_model(model_ft, data_cfg, model_cfg)
+    
     return model_ft, loss_train, acc_train, fs_train, loss_val, acc_val, fs_val 
     
 def save_model(model_ft, data_cfg, model_cfg):
@@ -269,4 +272,5 @@ def save_model(model_ft, data_cfg, model_cfg):
         os.mkdir(model_path)
         
     # saves model
+    print('---> saving model at {}/{}'.format(model_path, model_name))
     torch.save(model_ft.state_dict(), model_name)

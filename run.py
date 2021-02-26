@@ -87,7 +87,6 @@ def main(targets):
         if not os.path.isdir(VALID_DIR):
             raise Exception('Please run data target before running test')
         
-        
         # Loss function
         criterion = SoftTreeLoss_wrapper(data_cfg)
         
@@ -107,7 +106,7 @@ def main(targets):
             fp = model_cfg['performancePath']
         )
         
-        print("---> Finished running train target.")
+        print("---> Finished running test target.")
         
     if "hierarchy" in targets:
         print('---> Runnning hierarchy target')
@@ -190,7 +189,10 @@ def main(targets):
         model_weights = torch.load(data_cfg['hierarchyModelPath'])
         
         print('---> NBDT transition beginning...')
-        criterion = SoftTreeLoss_wrapper(data_cfg)
+        if 'softloss' in targets:
+            criterion = SoftTreeLoss_wrapper(data_cfg)
+        elif 'hardloss' in targets:
+            criterion = HardTreeLoss_wrapper(data_cfg)
         
         # using induced hierarchy, create model 
         nbdt_model = SoftNBDT(
