@@ -253,7 +253,7 @@ class HardTreeSupLoss(TreeSupLoss):
             fraction = (
                 outputs_sub.size(0) / float(num_losses) * self.tree_supervision_weight
             )
-            loss += self.criterion(outputs_sub, targets_sub) * fraction
+            loss = loss + (self.criterion(outputs_sub, targets_sub) * fraction)
         return loss
 
 
@@ -323,5 +323,5 @@ class SoftSegTreeSupLoss(SoftTreeSupLoss):
         coerced_outputs = coerce_tensor(outputs)
         bayesian_outputs = self.rules(coerced_outputs)
         bayesian_outputs = uncoerce_tensor(bayesian_outputs, outputs.shape)
-        loss += self.criterion(bayesian_outputs, targets) * self.tree_supervision_weight
+        loss = loss + (self.criterion(bayesian_outputs, targets) * self.tree_supervision_weight)
         return loss

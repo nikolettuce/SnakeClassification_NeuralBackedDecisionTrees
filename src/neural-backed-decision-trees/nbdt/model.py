@@ -224,7 +224,7 @@ class SoftEmbeddedDecisionRules(EmbeddedDecisionRules):
         num_classes = len(tree.classes)
         device = example["logits"].device
         class_probs = torch.ones((num_samples, num_classes)).to(device)
-
+        
         for node in tree.inodes:
             outputs = wnid_to_outputs[node.wnid]
 
@@ -238,7 +238,10 @@ class SoftEmbeddedDecisionRules(EmbeddedDecisionRules):
                 "All old indices must be unique in order for this operation "
                 "to be correct."
             )
-            class_probs[:, old_indices] *= outputs["probs"][:, new_indices]
+            
+            # stop inplace error 
+            with torch.no_grad():
+                class_probs[:, old_indices] = class_probs[:, old_indices] * outputs["probs"][:, new_indices].clone()
         return class_probs
 
     def forward_with_decisions(self, outputs):
