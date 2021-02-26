@@ -17,6 +17,11 @@ from torchvision import datasets, models, transforms
 from sklearn.metrics import f1_score
 import os
 
+from nbdt.model import SoftNBDT
+from nbdt.model import HardNBDT
+from nbdt.loss import SoftTreeSupLoss
+from nbdt.loss import HardTreeSupLoss
+
 from write_to_json import *
 
 def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
@@ -271,3 +276,90 @@ def save_model(model_ft, data_cfg, model_cfg):
     # saves model
     print('---> saving model at {}/{}'.format(model_path, model_name))
     torch.save(model_ft.state_dict(), model_name)
+    
+    
+def run_nbdt(data_cfg, model_cfg, loss_type):
+    '''
+    Runs nbdt 
+    '''
+    # check to make sure loss_type is specified
+    assert (
+        loss_type in ["SoftTreeSupLoss", "HardTreeSupLoss"]
+    ), "Please specify SoftTreeSupLoss or HardTreeSupLoss"
+    
+    # create dataloaders
+    dataloaders_dict, num_classes = create_dataloaders(
+        data_cfg['dataDir'],
+        model_cfg['batchSize'],
+        model_cfg['inputSize']
+    )
+    
+    # Detect if we have a GPU available
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # Initialize the model for this run
+    model, input_size = initialize_model(
+        model_cfg['modelName'],
+        num_classes,
+        feature_extract = model_cfg['featureExtract'],
+        use_pretrained=True
+    ) 
+    
+    # load model weights
+    if loss_type == "SoftTreeSupLoss":
+        model_weights = torch.load(data_cfg['hierarchyModelPath'])
+    elif loss_type == "HardTreeSupLoss":
+        model_weights = torch.load(data_cfg['hierarchyModelPath'])
+        
+    model = model.to(device) # make model use GPU
+    model.load_state_dict(model_weights)
+    
+    # create NBDT
+    print('---> Creating NBDT...')
+    if loss_type == "SoftTreeSupLoss":
+        model = SoftNBDT(
+            model = model,
+            dataset = 'snakes', 
+            hierarchy='induced-densenet121',
+            path_graph = os.path.join(data_cfg['hierarchyPath'], data_cfg['hierarchyJSON']),
+            path_wnids =  data_cfg['wnidPath']
+        )
+    else:
+        model = HardNBDT(
+            model = model,
+            dataset = 'snakes', 
+            hierarchy='induced-densenet121',
+            path_graph = os.path.join(data_cfg['hierarchyPath'], data_cfg['hierarchyJSON']),
+            path_wnids =  data_cfg['wnidPath']
+        )
+    print('---> Finished creating NBDT.')
+    
+    model.eval()
+
+    running_corrects = 0
+    fscore = []
+
+    print('---> Running inference...')
+    # iterate over data
+    for inputs, labels in dataloaders_dict['valid_snakes_r1']:
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        with torch.no_grad():
+            outputs = model(inputs)
+            _, preds = torch.max(outputs, 1)
+
+        # statistics
+        labels_cpu = labels.cpu().numpy()
+        predictions_cpu = preds.cpu().numpy()
+        Fscore = f1_score(labels_cpu, predictions_cpu, average='macro')
+        fscore.append(Fscore)
+        running_corrects += torch.sum(preds == labels.data)
+    print('---> Finished running inference...')
+    
+    epoch_acc = running_corrects.double() / len(dataloaders_dict['valid_snakes_r1'].dataset)
+    epoch_fscore = np.average(np.array(fscore))
+    
+    print(" ")
+    print('{} Acc: {:.4f} F1: {:.4f}'.format('NBDT Test', epoch_acc, epoch_fscore))
+    print(" ")
