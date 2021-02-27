@@ -153,14 +153,16 @@ def create_dataloaders(DATA_DIR, batch_size, input_size):
     
     data_transforms = {
             'train_snakes_r1': transforms.Compose([
-                transforms.Resize(input_size),
-                transforms.CenterCrop(input_size),
+                transforms.RandomResizedCrop(input_size),
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomRotation([0, 90]),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'valid_snakes_r1': transforms.Compose([
-                transforms.Resize(input_size),
-                transforms.CenterCrop(input_size),
+                transforms.RandomResizedCrop(input_size),
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomRotation([0, 90]),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
