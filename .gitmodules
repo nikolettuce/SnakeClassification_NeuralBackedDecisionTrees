@@ -1,3 +1,0 @@
-[submodule "neural-backed-decision-trees"]
-	path = src/neural-backed-decision-trees
-	url = https://github.com/nikolettuce/neural-backed-decision-trees/
