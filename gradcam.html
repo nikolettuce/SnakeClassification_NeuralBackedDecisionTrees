@@ -8,6 +8,29 @@
     <title>Snake Classification using Neural-Backed Decision Trees</title>
 </head>
 <body>
+    <section id="about">
+        <div class="about container top gradcam">
+            <h1 class='section-title'>GradCAM</h1>
+            <h2>
+                Grad-CAM is a popular technique for visualizing the parts of an image that a Convolutional Neural Network (CNN) is looking.
+                
+            </h2>
+            <p>
+                We applied functional Grad-CAM code on the 
+                <a href="https://www.aicrowd.com/challenges/snakeclef2021-snake-species-identification-challenge/dataset_files"> AiCrowd Snake Classification Challenge</a>
+                dataset. The goal of the
+                Grad-CAM algorithm is to get a better understanding of image classification through visual
+                explanations. Grad-CAM works by computing the gradient of a
+                target class with respect to feature maps. This is because putting the average gradient through
+                Global Average Pooling (GAP) will generate weights which measure the importance of such
+                feature maps for a target class. This will lead to better localization than other algorithms such as
+                CAM. The outcome is the heatmap which visualizes the weighted combination of feature maps,
+                meaning that parts of the image which are considered significant are highlighted.
+
     
+            </p>
+        </div>
+        
+    </section> 
 </body>
 </html>

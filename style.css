@@ -31,6 +31,16 @@ p{
     letter-spacing: 0.05rem;
 }
 
+li{
+    font-size: 1.7rem;
+    color: white;
+    margin-top: 5px;
+    padding-left: 0px;
+    line-height: 3rem;
+    font-weight: 300px;
+    letter-spacing: 0.05rem;
+}
+
 body{
     color: #eee;
     background: #121212;
@@ -281,6 +291,7 @@ body{
 #about .about-top {
     max-width: 88%;
     margin: 0 auto;
+    padding-bottom: 25px;
 }
 
 #about .method {
@@ -319,11 +330,12 @@ body{
     height: 100%;
     width: 100%;
     background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
+    border-radius: 10px;
     opacity: 0.8;
     z-index: -1;
 }
 
-.about .about-item h2{
+#about .about-item h2{
     font-size: 3rem;
     font-weight: 1000px;
     color: green;
@@ -331,7 +343,7 @@ body{
     text-transform: uppercase;
 }
 
-.about .about-item p{
+#about .about-item p{
     color: white;
     text-align: left;
     font-size: 1.5rem;
@@ -339,7 +351,7 @@ body{
     margin-left: 20px;
 }
 
-.about .cta{
+#about .cta{
     display: inline-block;
     padding: 10px 30px;
     color: white;
@@ -353,12 +365,12 @@ body{
     transition-property: background-color, color;
 }
 
-.about .cta:hover{
+#about .cta:hover{
     color: white;
     background-color: green;
 }
 
-.about .about-gradcam{
+#about .about-gradcam{
     display:flex;
     justify-content: center;
     align-items: center;
@@ -367,13 +379,134 @@ body{
     min-height:1vh;
 }
 
-.about .about-gradcam img{
+#about .about-gradcam img{
     display: flex;
     flex-wrap: wrap;
     margin: 10px;
+    width: 95%;
 }
 
+#about a {
+    color: green;
+}
 /* End About Section */
+
+/* About Data Section */
+#about .data-row {
+    display:flex;
+    flex-direction: row;
+}
+
+#about .data-item{
+    flex-basis: 88%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: left;
+    flex-direction: column;
+    padding: 2%;
+    border-radius: 10px;
+    background-color: darkolivegreen;
+    background-size: cover;
+    margin: 10px 2%;
+    position: relative;
+    z-index: 1;
+}
+
+#about .data-item::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
+    opacity: 0.8;
+    z-index: -1;
+}
+
+#about .data-top a {
+    color: lightgreen;
+}
+
+#about .data-item h2{
+    font-size: 3rem;
+    font-weight: 1000px;
+    color: green;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+#about .data-item p{
+    text-align: left;
+    margin-left: 2.5%;
+}
+
+#about .data-item img{
+    width: 100%;
+}
+
+#about .data-box {
+    justify-content: center;
+}
+
+#about .data-item ul{
+    text-align: left;
+    margin-left: 10%;
+    margin-bottom: 10px;
+}
+
+#about .data-img {
+    position: relative;
+    padding: 10px;
+}
+
+#about .data-img span {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#about .data-img a {
+    color: red;
+}
+
+#about .data-snake{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin-top: 5px;
+    min-height: 1vh;
+}
+
+#about .data-snake img{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px;
+    width:95%;
+}
+
+/* End Data Section */
+
+
+/* gradcam section */
+#about .gradcam{
+    align-items: stretch;
+}
+
+#about .gradcam p{
+    padding-top: 25px;
+    text-align: left;
+    font-size: 1.5rem;
+}
+
+#about .gradcam h2{
+    color: lightgreen;
+    font-size: 3rem;
+}
+/* end gradcam section */
+
 /* Keyframes */
 @keyframes text_reveal_box { 
     50%{

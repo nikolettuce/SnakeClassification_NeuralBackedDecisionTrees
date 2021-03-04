@@ -47,20 +47,81 @@
             <div class="about-top">
                 <h1 class="section-title">About</h1>
                 <p>
+                    Deep learning models are becoming more prevalent in image recognition and prediction tasks.
+                    While these models have shown breakthroughs with high performances in accomplishing these
+                    previously computationally impossible tasks, mass users have found it hard to trust the outcomes
+                    of these algorithms as the underlying mechanism is opaque. This trust issue makes the
+                    explainability of deep learning models vital.
+                    <br></br>  
                     Our project focuses on building explanable image classification models on snake images from 
                     <a href = "https://www.aicrowd.com/challenges/snakeclef2021-snake-species-identification-challenge/dataset_files"> AiCrowd</a>. 
                     Our plan is to apply gradcam to images of different snake species, construct a Densenet, and transform them into decision trees to 
                     visualize the classification process.
+
                 </p>
+            </div>
+
+            <!-- Data Section-->
+            <div class="data-top">
+                <h1 id = "data" class="section-title">Data</h1>
+                <div class="data-row">
+                    <div class="data-item">
+                        <!-- SOURCE START -->
+                        <h2>Source</h2>
+                        <p>
+                            Our data can be found from the
+                            <a href="https://www.aicrowd.com/challenges/snakeclef2021-snake-species-identification-challenge/dataset_files"> AiCrowd Snake Classification Challenge</a>.
+                            <br>
+                            This data included...
+                        </p>
+                           
+                        <ul>
+                            <li>45 different snake species to classify</li>
+                            <li>66,000 images in training set</li>
+                            <li>16,500 images in test set</li>
+                        </ul>
+                        <br>
+                        <!-- SOURCE END --> 
+
+                        <!-- DATA TYPE START --> 
+                        <h2>Data types</h2>
+                        <div class = "data-snake container">
+                            <div class = "data-snake"><img src="img/snake_1.jpg"></div>
+                            <div class = "data-snake"><img src="img/snake_2.jpg"></div>
+                            <div class = "data-snake"><img src="img/snake_3.jpg"></div>
+                        </div>
+                        <!-- DATA TYPE END --> 
+
+                    </div>
+
+                    <div class="data-item data-box">
+                        <h2>difficulties</h2>
+                        <p> 
+                            certain snakes looks completely different at juvenile vs adult stage, or female vs male adult
+                        </p>
+                        <div class = "data-img">
+                            <img src="img/same_snake.png">
+                            <span><a href="https://www.aicrowd.com/challenges/snakeclef2021-snake-species-identification-challenge">Source</a></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End Data Section-->
+
+            <!-- Methods Section-->
             <div class="about-top method">
                 <h1 id="methods" class="section-title">Methods</h1>
             </div>
+            <!-- End Methods Section-->
+
+            <!-- Cards Section -->
             <div class="about-bottom">
                 <div class="about-item">
                     <h2> GradCAM</h2>
-                    <p> Our approach, called Gradient-weighted Class Activation Mapping (Grad-CAM), 
-                        uses the class-specific gradient information flowing into the final convolutional layer of a CNN to produce a coarse localization
-                         map of the important regions in the image. [1]
+                    <p> One method of analysis, called Gradient-Weighted Class Activation Mapping (Grad-CAM), 
+                        uses class-specific information from a Convolutional Neural Network's (CNN) model weights to produce a coarse localization
+                        map of the important regions in the image. This tells the user what the model deems important to classifying the image.
                     </p>
                     <div class = "about-gradcam container">
                         <div class = "about-gradcam-content"><img src="img/gradcam_1.jpg"></div>
@@ -71,7 +132,7 @@
                 </div>
                 <div class="about-item">
                     <h2> Neural-Backed Decision Trees</h2>
-                    <p> NBDTs replace a neural network's final linear layer with a differentiable sequence of decisions and a surrogate loss. This forces the model to 
+                    <p> NBDTs replace a neural network's final layer with a differentiable sequence of decisions and a surrogate loss. This forces the model to 
                         learn high-level concepts and lessens reliance on highly-uncertain decisions, yielding (1) accuracy: NBDTs match or outperform modern neural networks on CIFAR, 
                         ImageNet and better generalize to unseen classes by up to 16%. Furthermore, our surrogate loss improves the original 
                         model's accuracy by up to 2%. NBDTs also afford (2) interpretability: improving human trustby clearly identifying model mistakes and assisting in dataset debugging.[2]
@@ -79,6 +140,7 @@
                     <a href = "nbdt.html" type = "button" class = "cta"> Learn More about NBDTs </a>
                 </div>
             </div>
+            <!-- End Cards Section -->
         </div>
     </section>
     <!-- End About Section-->
