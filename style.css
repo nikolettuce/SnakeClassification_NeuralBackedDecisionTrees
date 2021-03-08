@@ -31,6 +31,10 @@ p{
     letter-spacing: 0.05rem;
 }
 
+sub {
+    font-size: 1rem;
+}
+
 li{
     font-size: 1.7rem;
     color: white;
@@ -275,7 +279,7 @@ body{
     text-align: center;
     max-width: 90%;
     margin: 0 auto;
-    padding: 50px 0;
+    padding: 10px 0;
 }
 
 #about .section-title{
@@ -283,6 +287,7 @@ body{
     font-weight: bold;
     color: green;
     margin-bottom: 10px;
+    margin-top: 10px;
     text-transform: uppercase;
     letter-spacing: .2rem;
     text-align: center;
@@ -291,7 +296,7 @@ body{
 #about .about-top {
     max-width: 88%;
     margin: 0 auto;
-    padding-bottom: 25px;
+    padding-bottom: 0px;
 }
 
 #about .method {
@@ -304,7 +309,7 @@ body{
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 50px;
+    margin-top: 0px;
 }
 
 #about .about-item{
@@ -346,9 +351,10 @@ body{
 #about .about-item p{
     color: white;
     text-align: left;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     line-height: 2.8rem;
     margin-left: 20px;
+    letter-spacing: 0.07rem;
 }
 
 #about .cta{
@@ -388,6 +394,11 @@ body{
 
 #about a {
     color: green;
+}
+
+#about .snake_hierarchy{
+    width:50%;
+    padding-top: 10px;
 }
 /* End About Section */
 
@@ -447,7 +458,7 @@ body{
 }
 
 #about .data-box {
-    justify-content: center;
+    justify-content: start;
 }
 
 #about .data-item ul{
@@ -465,6 +476,7 @@ body{
     position: absolute;
     right: 10px;
     top: 10px;
+    margin-top: 50px;
 }
 
 #about .data-img a {
@@ -474,36 +486,157 @@ body{
 #about .data-snake{
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     align-content: center;
     margin-top: 5px;
     min-height: 1vh;
+    
+}
+
+#about .data-snake .list {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    align-self: start;
+    width: 100%;
+}
+
+#about .data-snake-image{
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    align-items:center;
+    box-sizing: border-box;
 }
 
 #about .data-snake img{
-    display: flex;
-    flex-wrap: wrap;
-    margin: 10px;
-    width:95%;
+    margin: 5px;
+    min-width: 0;
+}
+
+#about .resize{
+    height: 96%;
+}
+
+#about .data-img .difficulties{
+    margin-top: 50px;
+}
+
+#about .about-item ul{
+    text-align: left;
+    margin-left: 5%;
 }
 
 /* End Data Section */
 
-
-/* gradcam section */
-#about .gradcam{
-    align-items: stretch;
+/* Results Section */
+#about .results-top{
+    display:flex;
 }
 
-#about .gradcam p{
-    padding-top: 25px;
-    text-align: left;
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    table-layout: fixed;
+    width:80%;
+    align-self: center;
+}
+
+.styled-table thead tr {
+    background-color: green;
+    color: #ffffff;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
     font-size: 1.5rem;
 }
 
-#about .gradcam h2{
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid green;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color:lightgreen;
+}
+/* End Results Section */
+
+/* References Section */
+#about .references {
+    text-align: left;
+    width: 80%;
+}
+/* End References */
+
+/* gradcam section */
+#about .detail{
+    align-items: stretch;
+}
+
+#about .detail p{
+    padding-top: 25px;
+    text-align: left;
+    font-size: 1.7rem;
+}
+
+#about .detail h1{
+    color: green;;
+    text-align:left;
+}
+
+#about .detail h2{
     color: lightgreen;
     font-size: 3rem;
+    text-align: left;
+}
+
+#about .detail .nbdt-list{
+    align-content:left;
+    text-align:left;
+}
+
+#about .detail .nbdt-list li{
+    margin-left: 5%;
+    font-size: 1.5rem;
+}
+
+#about .heading{
+    font-size: 2.5rem;
+}
+
+#about .detail img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:100%;
+}
+
+#about .nbdt-source span {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#about .nbdt-source {
+    position: relative;
+    text-align:center;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    width:60%
 }
 /* end gradcam section */
 

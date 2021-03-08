@@ -20,7 +20,9 @@
                     <ul>
                         <li><a href="#hero" data-after="Home">Home</a></li>
                         <li><a href="#about" data-after="About">About</a></li>
-                        <li><a href="#methods" data-after="About">Methods</a></li>
+                        <li><a href="#data" data-after="About">Data</a></li>
+                        <li><a href="#methods" data-after="About">Algorithms</a></li>
+                        <li><a href="#results" data-after="About">Results</a></li>
                     </ul>
                 </div>
             </div>
@@ -36,6 +38,7 @@
                 <h1> using <span></span></h1>
                 <h1> Neural-Backed Decision Trees <span></span></h1>
                 <a href = "https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees" type = "button" class = "cta"> Github Repo </a>
+                <a href = "https://github.com/nikolettuce/DSC180B_06_NeuralBackedDecisionTrees" type = "button" class = "cta"> Paper </a>
             </div>
         </div>
     </section>
@@ -50,19 +53,24 @@
                     Deep learning models are becoming more prevalent in image recognition and prediction tasks.
                     While these models have shown breakthroughs with high performances in accomplishing these
                     previously computationally impossible tasks, mass users have found it hard to trust the outcomes
-                    of these algorithms as the underlying mechanism is opaque. This trust issue makes the
+                    of these algorithms, as the underlying mechanism is opaque. This trust issue makes the
                     explainability of deep learning models vital.
                     <br></br>  
-                    Our project focuses on building explanable image classification models on snake images from 
-                    <a href = "https://www.aicrowd.com/challenges/snakeclef2021-snake-species-identification-challenge/dataset_files"> AiCrowd</a>. 
-                    Our plan is to apply gradcam to images of different snake species, construct a Densenet, and transform them into decision trees to 
-                    visualize the classification process.
+                    When hiking, encountering snakes is fairly common on a trail; however ascertaining which species a snake is can be a daunting task to most, as there are a plethora of snake species.
+                     A tool that can help identify a snake’s species, thus finding out if it is venomous can come in handy to hikers world-wide. 
+                     However, current methods of snake classification are opaque, given that people do not understand the “black box” 
+                     of Convolutional Neural Networks. Thus, a method with more interpretability might be able to change the status quo. 
+                    <br></br>
+                    This project focuses on building explainable image classification models on snake images from 
+                    <a href = "https://www.aicrowd.com/challenges/snakeclef2021-snake-species-identification-challenge/dataset_files"> AiCrowd</a>. To do this,
+                    we applied Grad-CAM and Neural-Backed Decision Trees to a snake species classification task, 
+                    in an attempt to remove the "black box" around neural networks by visualiziation.
 
                 </p>
             </div>
 
             <!-- Data Section-->
-            <div class="data-top">
+            <div id="data" class="data-top">
                 <h1 id = "data" class="section-title">Data</h1>
                 <div class="data-row">
                     <div class="data-item">
@@ -86,9 +94,24 @@
                         <!-- DATA TYPE START --> 
                         <h2>Data types</h2>
                         <div class = "data-snake container">
-                            <div class = "data-snake"><img src="img/snake_1.jpg"></div>
-                            <div class = "data-snake"><img src="img/snake_2.jpg"></div>
-                            <div class = "data-snake"><img src="img/snake_3.jpg"></div>
+                            <div class = "data-snake list">
+                                <p>
+                                    The data are able to be categorized into three types:
+                                </p>
+
+                                <ul>
+                                    <li>Snake blends in with background</li>
+                                    <li>Snake contrasts background</li>
+                                    <li>Snake on human hand or arm</li>
+                                </ul>
+                            </div>
+                            
+                            
+                            <div class = "data-snake-image">
+                                <img src="img/snake_1.jpg">
+                                <img class = "resize" src="img/snake_2.jpg">
+                                <img src="img/snake_3.jpg">
+                            </div>
                         </div>
                         <!-- DATA TYPE END --> 
 
@@ -97,21 +120,22 @@
                     <div class="data-item data-box">
                         <h2>difficulties</h2>
                         <p> 
-                            certain snakes looks completely different at juvenile vs adult stage, or female vs male adult
+                            Certain snakes look completely different at the juvenile stage vs adult stage, or female vs male adult.
+                            <br></br>
+                            For example, the images below show snakes that are female adult (top left and bottom right), adult male (top right), and juvenile (bottom left).
                         </p>
                         <div class = "data-img">
-                            <img src="img/same_snake.png">
+                            <img class="difficulties" src="img/same_snake.png">
                             <span><a href="https://www.aicrowd.com/challenges/snakeclef2021-snake-species-identification-challenge">Source</a></span>
                         </div>
                     </div>
-
                 </div>
             </div>
             <!-- End Data Section-->
 
             <!-- Methods Section-->
             <div class="about-top method">
-                <h1 id="methods" class="section-title">Methods</h1>
+                <h1 id="methods" class="section-title">Algorithms</h1>
             </div>
             <!-- End Methods Section-->
 
@@ -121,36 +145,92 @@
                     <h2> GradCAM</h2>
                     <p> One method of analysis, called Gradient-Weighted Class Activation Mapping (Grad-CAM), 
                         uses class-specific information from a Convolutional Neural Network's (CNN) model weights to produce a coarse localization
-                        map of the important regions in the image. This tells the user what the model deems important to classifying the image.
+                        map of the important regions in the image. This tells the user what the model deems important to classifying the image. However, this only tells the user where the model is looking, 
+                        not why the model thinks the image belongs to a certain class.
                     </p>
                     <div class = "about-gradcam container">
                         <div class = "about-gradcam-content"><img src="img/gradcam_1.jpg"></div>
-                        <div class = "about-gradcam-content"><img src="img/gradcam_2.jpg"></div>
+                        <div class = "about-gradcam-content resize"><img src="img/gradcam_2.jpg"></div>
                         <div class = "about-gradcam-content"><img src="img/gradcam_3.jpg"></div>
                     </div>
                     <a href = "gradcam.html" type = "button" class = "cta"> Learn More about GradCAM </a>
                 </div>
                 <div class="about-item">
                     <h2> Neural-Backed Decision Trees</h2>
-                    <p> NBDTs replace a neural network's final layer with a differentiable sequence of decisions and a surrogate loss. This forces the model to 
-                        learn high-level concepts and lessens reliance on highly-uncertain decisions, yielding (1) accuracy: NBDTs match or outperform modern neural networks on CIFAR, 
-                        ImageNet and better generalize to unseen classes by up to 16%. Furthermore, our surrogate loss improves the original 
-                        model's accuracy by up to 2%. NBDTs also afford (2) interpretability: improving human trustby clearly identifying model mistakes and assisting in dataset debugging.[2]
+                    <p> 
+                        NBDTs are a method to jointly improve both accuracy and interpretability of neural networks, by creating a decision tree from an already trained model - and fine tuning it.
+                        <br></br>
+                        The steps for applying NBDT can be summarized in three steps:
                     </p>
+                    <ul>
+                        <li>Induced Hierarchy</li>
+                        <li>Tree Supervision Loss</li>
+                        <li>Fine-tuning model</li>
+                    </ul>
+                    <br></br>
+                    <p>
+                        Below is the hierarchy generated by the our model, though due to the nature of the algorithm designed to assign meaning to the 
+                        splits within the tree, the induced hierarchy failed to work the way this project intended it to (<a href=nbdt.html>learn more here</a>).
+                    </p>
+                    <div class = "data-img">
+                        <img class="snake_hierarchy" src="img/snake_hierarchy.png">
+                    </div>
                     <a href = "nbdt.html" type = "button" class = "cta"> Learn More about NBDTs </a>
                 </div>
             </div>
             <!-- End Cards Section -->
+
+            <div id="results" class="about-top method">
+                <h1 class="section-title">Results</h1>
+            </div>
+
+            <div class="about-bottom">
+                <div class="about-item">
+                    <!-- Model Performance START -->
+                    <h2>Model Performance</h2>
+                    <br></br>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Accuracy</th>
+                                <th>F1-Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Baseline CNN</td>
+                                <td>0.6617</td>
+                                <td>0.516</td>
+                            </tr>
+                            <tr>
+                                <td>SoftNBDT</td>
+                                <td>0.4450</td>
+                                <td>0.302</td>
+                            </tr>
+                            <tr class="active-row">
+                                <td>HardNBDT</td>
+                                <td>0.6850</td>
+                                <td>0.542</td>
+                            </tr>
+                            <!-- and so on... -->
+                        </tbody>
+                    </table>
+                    <!-- Model performance END -->
+                </div>
+            </div>
         </div>
     </section>
     <!-- End About Section-->
 
-    <!-- Results Section-->
-    <section id="results">
-        <div class="results container top">
-           
+    <section id="about">
+        <div class="about container top references">
+            <h1 class='section-title'>References</h1>
+            <ul>
+                <li><a href=" https://www.aicrowd.com/challenges/snake-species-identification- challenge/dataset_files">AiCrowd Data Source</a></li>
+                <li>@misc{wan2021nbdt, title={NBDT: Neural-Backed Decision Trees}, author={Alvin Wan and Lisa Dunlap and Daniel Ho and Jihan Yin and Scott Lee and Henry Jin and Suzanne Petryk and Sarah Adel Bargal and Joseph E. Gonzalez}, year={2021}, eprint={2004.00221}, archivePrefix= {arXiv}, primaryClass={cs.CV} }</li>
+            </ul>
         </div>
-    </section>
-    <!-- End About Section-->
+    </section> 
 </body>
 </html>

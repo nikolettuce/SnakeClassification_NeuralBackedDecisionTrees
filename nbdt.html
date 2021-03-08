@@ -9,7 +9,67 @@
 </head>
 <body>
     <section id="about">
-        <h1>GradCAM</h1>
+        <div class="about container top detail">
+            <h1 class='section-title'>Neural-Backed Decision Trees (NBDTs)</h1>
+            <h2>
+                NBDTs are a method to jointly improve both accuracy and interpretability of neural networks, by creating a decision tree from an already trained model - and fine tuning it.          
+            </h2>
+            <p>
+                NBDTs can be summarized into 3 different parts:
+            </p>
+            <div class = "nbdt-list">
+                <ul>
+                    <li>Induced Hierarchy</li>
+                    <li>Tree Supervision Loss</li>
+                    <li>Fine-tuning model</li>
+                </ul>
+            </div>
+
+            <h1 class="section-title heading">Induced Hierarchy</h1>
+                <div class = "nbdt-source">
+                    <img src='img/induced_hierarchy.jpg'>
+                    <span><a href="https://arxiv.org/pdf/2004.00221.pdf">Source</a></span>
+                </div>
+            <p class= "">
+                An induced hierarchy is a hierarchy built from the weight vector of a model's final fully connected layer. This idea here is that each dimension
+                within the vector represents a class. Using agglomerative clustering, we can iteratively pair each class together, framing the decisions a model makes
+                as a binary split (though this is not always the case, hence this is a limitation of this approach). This allows for more model interpretation by
+                gaining the ability to ascertain which classes are more likely to be paired together.
+                <br></br>
+                The induced hierarchy tree is produced by first loading the weights of a pre-trained model’s final fully connected layer, 
+                with weight matrix W ∈ R D×K. Then it takes rows &omega;k ∈ W and normalizes for each leaf node’s weight and averages each pair of leaf nodes for the parents’
+                 weight. Last but not least, for each ancestor, it averages all leaf node weights in its subtree. 
+                That average is the ancestor’s weight. Here, the ancestor is the root, so its weight is the average of all leaf weights &omega;<sub>1</sub>, &omega;<sub>2</sub>, &omega;<sub>3</sub>, &omega;<sub>4</sub>.
+            </p>
+            <h1 class="section-title heading">Tree Supervision Loss</h1>
+            <p>
+            <div class = "nbdt-list">
+                <div class = "nbdt-source">
+                    <img src='img/treesuploss.jpg'>
+                    <span><a href="https://arxiv.org/pdf/2004.00221.pdf">Source</a></span>
+                </div>
+                <p>
+                    Now, to tune the model, first we have to define a new loss function that can utilize the decision tree structure from the induced hierarchy. We do this by choosing between either Hard or Soft loss, which is defined below.
+                </p>
+                <ul>
+                    <li>Hard: is the classic “hard” oblique decision tree. Each node picks the child node with the largest inner product, and visits that node next. Continue until a leaf is reached. </li>
+                    <li>Soft: is the “soft” variant, where each node simply returns probabilities, as normalized inner products, of each child. For each leaf, compute the probability of its path to the root. Pick leaf with the highest probability.</li>
+                    <li>Hard vs. Soft: Assume &omega;<sub>4</sub> is the correct class. With hard inference, the mistake at the root (red) is irrecoverable. However, with soft inference, the highly-uncertain decisions at the root and at &omega;<sub>2</sub> are superseded by
+                         the highly certain decision at &omega;<sub>3</sub> (green). This means the model can still correctly pick &omega;<sub>4</sub> despite a mistake at the root. In short, soft inference can tolerate mistakes in highly uncertain decisions.</li>
+                </ul>
+            </div>
+
+            </p>
+            <h1 class="section-title heading">Fine-tuning model</h1>
+            <div class = "nbdt-source">
+                <img src='img/loss_function.png'>
+                <span><a href="https://arxiv.org/pdf/2004.00221.pdf">Source</a></span>
+            </div>
+            <p>
+                To fine tune the model, we wrap a loss function, in this case CrossEntropyLoss, with &omega;<sub>t</sub> and &beta;<sub>t</sub> being the weights of the original model
+                and the weights of the soft or hard tree loss. &Delta; here are the probability distributions of the predictions and the labels.
+            </p>
+        </div>
     </section>
 </body>
 </html>
