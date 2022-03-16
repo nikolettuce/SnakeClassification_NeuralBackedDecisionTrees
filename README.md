@@ -15,7 +15,7 @@ Our project focuses on building explanable image classification models on snake 
 
 ### Demo
 
-Link to our website:  https://nikolettuce.github.io/DSC180B_06_NeuralBackedDecisionTrees/
+Link to our website:  https://nikolettuce.github.io/SnakeClassification_NeuralBackedDecisionTrees/
 
 #### GradCAM
 
