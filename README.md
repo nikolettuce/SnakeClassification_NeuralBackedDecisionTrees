@@ -1,5 +1,5 @@
 # Snake NeuralBackedDecisionTrees
-DSC180B Group 6 Snake Classification using Neural Backed Decision Trees
+Snake Classification using Neural Backed Decision Trees
 
 Team Members:
 
